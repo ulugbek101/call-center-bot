@@ -19,7 +19,7 @@ class Database:
             cursorclass=pymysql.cursors.DictCursor
         )
 
-    def execute(self, sql: str, params: tuple = (), commit=False, fetchone=False, fetchall=False) -> dict | list:
+    def execute(self, sql: str, params: tuple = (), commit=False, fetchone=False, fetchall=False) -> dict | list | None:
         database = self.connect()
         cursor = database.cursor()
 
@@ -74,3 +74,17 @@ class Database:
             UPDATE users SET is_activation_code_used = TRUE, telegram_id = %s WHERE activation_code = %s
         """
         self.execute(sql, (telegram_id, activation_code,), commit=True)
+
+    def check_user_activation(self, telegram_id: str) -> bool:
+        """Checks user activation status
+
+        Args:
+            telegram_id (str): user's telegram id
+
+        Returns:
+            bool: True/False
+        """
+        sql = """
+            SELECT * FROM users WHERE telegram_id = %s
+        """
+        return bool(self.execute(sql, (telegram_id,), fetchone=True))

@@ -2,6 +2,7 @@ import re
 
 from aiogram.fsm.context import FSMContext
 from aiogram import types
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 from router import router
 from states.registration import UserRegistration
@@ -66,7 +67,10 @@ async def save_middle_name(message: types.Message, state: FSMContext):
 
     # Request phone_number
     await message.answer(text="Telefon raqamingizni kiriting 👇 yoki tugmani bosish orqali yuboring")
-    await message.answer(text="Telefon raqamni tugma orqali yuboring yoki quyidagicha formatda kiriting:\n1. +998996937308\n2. +998 99 693 73 08")
+    await message.answer(
+        text="Telefon raqamni tugma orqali yuboring yoki quyidagicha formatda kiriting:\n1. +998996937308\n2. +998 99 693 73 08",
+        reply_markup=ReplyKeyboardBuilder().button(text="📞 Telefon raqamimni ulashish", request_contact=True).as_markup(resize_keyboard=True)
+    )
     await state.set_state(UserRegistration.phone_number)
 
 
@@ -91,8 +95,17 @@ async def save_phone_number(message: types.Message, state: FSMContext):
     pattern = r'^\+998\d{9}$'
 
     if re.match(pattern=pattern, string=phone_number):
-        db.save_attribute(attribute_name="phone_number", value=phone_number, telegram_id=message.from_user.id)
-        await message.answer(text="Telefon raqamingiz muvaffaqiyatli saqlandi, rahmat ✅")
+        try:
+            db.save_attribute(attribute_name="phone_number", value=phone_number, telegram_id=message.from_user.id)
+        except Exception as exp:
+            # await message.answer(text="Telefon raqamni saqlashda xatolik yuz berdi.\n{exp.__class__.__name__}: {exp}")
+            await message.answer(text="Telefon raqam avval ro'yatga olingan")
+            return
+        await message.answer(
+            text="Telefon raqamingiz muvaffaqiyatli saqlandi ✅",
+            reply_markup=types.ReplyKeyboardRemove()
+        )
+        await message.answer(text="Siz muvaffaqiyatli ro'yxatga olindingiz, raxmat!")
         await state.clear()
     else:
         await message.answer(
