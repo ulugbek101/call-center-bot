@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import pymysql
 
 
@@ -20,6 +22,19 @@ class Database:
         )
 
     def execute(self, sql: str, params: tuple = (), commit=False, fetchone=False, fetchall=False) -> dict | list | None:
+        """Execution function of SQL code passed to this function
+
+        Args:
+            sql (str): SQL code
+            params (tuple, optional): parameters that should be passed to SQL code. Defaults to ().
+            commit (bool, optional): Whether operation should be committed or not. Defaults to False.
+            fetchone (bool, optional): Whether operation should return single object or not. Defaults to False.
+            fetchall (bool, optional): Wether operation should return list of objects or not. Defaults to False.
+
+        Returns:
+            dict | list | None: single object, list of objects or None if fetchone or fetchall where not specified
+        """
+
         database = self.connect()
         cursor = database.cursor()
 
@@ -46,6 +61,7 @@ class Database:
         Returns:
             dict | None: user dict or None
         """
+
         sql = """
             SELECT * FROM users WHERE activation_code = %s AND is_activation_code_used = FALSE
         """
@@ -58,6 +74,7 @@ class Database:
             attribute (str): user's attribute name, for example: first_name, last_name, ...
             telegram_id (str): user's telegram id
         """
+
         sql = f"""
             UPDATE users set {attribute_name}=%s WHERE telegram_id = %s
         """
@@ -70,6 +87,7 @@ class Database:
             activate_user (str): activation code of a user
             telegram_id (str): telegram id of a user
         """
+
         sql = """
             UPDATE users SET is_activation_code_used = TRUE, telegram_id = %s WHERE activation_code = %s
         """
@@ -84,7 +102,48 @@ class Database:
         Returns:
             bool: True/False
         """
+
         sql = """
             SELECT * FROM users WHERE telegram_id = %s
         """
         return bool(self.execute(sql, (telegram_id,), fetchone=True))
+
+    def get_milestones(self) -> list[dict]:
+        """Returns milestones list from database
+
+        Returns:
+            list[dict]: list of milestone objects
+        """
+
+        sql = """
+            SELECT * FROM milestones
+        """
+        return self.execute(sql, fetchall=True)
+
+    def get_user_progress(self, telegram_id: str) -> Tuple[int, str]:
+        """Returns user's progress as user's score and user's milestone where he/she reached
+
+        Args:
+            telegram_id (str): user's telegram id
+
+        Returns:
+            Tuple[int, str]: score, milestone name
+        """
+
+        sql = """
+            SELECT current_score, current_milestone_id FROM users WHERE telegram_id = %s
+        """
+
+        result = self.execute(sql, (telegram_id,), fetchone=True)
+        milestones = self.get_milestones()
+
+        current_milestone = ""
+        current_milestone_id = result.get("current_milestone_id")
+
+        current_score = result.get("current_score")
+        for milestone in milestones:
+            if current_milestone_id == milestone.get("id"):
+                current_milestone = milestone
+                break
+
+        return current_score, current_milestone
