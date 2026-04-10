@@ -52,6 +52,20 @@ class Database:
 
         return data
 
+    def get_user_by_telegram_id(self, telegram_id: str) -> dict | None:
+        """Return user from database if exists
+
+        Args:
+            telegram_id (str): user's telegram id
+
+        Returns:
+            dict | None: user dict or None
+        """
+        sql = """
+            SELECT * FROM users WHERE telegram_id = %s
+        """
+        return self.execute(sql, (telegram_id,), fetchone=True)
+
     def get_user(self, activation_code: str) -> dict | None:
         """Return user from database if exists
 
@@ -66,6 +80,20 @@ class Database:
             SELECT * FROM users WHERE activation_code = %s AND is_activation_code_used = FALSE
         """
         return self.execute(sql, (activation_code,), fetchone=True)
+
+    def get_user_points(self, user_id: str) -> int:
+        """Return user's total points from database
+
+        Args:
+            user_id (str): user's id
+
+        Returns:
+            int: user's total points
+        """
+        sql = """
+            SELECT SUM(amount) AS total_points FROM points WHERE user_id = %s
+        """
+        return self.execute(sql, (user_id,), fetchone=True).get("total_points")
 
     def save_attribute(self, attribute_name: str, value: str, telegram_id: str) -> None:
         """Saves user's attribute
@@ -116,7 +144,7 @@ class Database:
         """
 
         sql = """
-            SELECT * FROM milestones
+            SELECT * FROM milestones WHERE is_active = TRUE
         """
         return self.execute(sql, fetchall=True)
 
@@ -129,21 +157,14 @@ class Database:
         Returns:
             Tuple[int, str]: score, milestone name
         """
-
-        sql = """
-            SELECT current_score, current_milestone_id FROM users WHERE telegram_id = %s
-        """
-
-        result = self.execute(sql, (telegram_id,), fetchone=True)
+        user = self.get_user_by_telegram_id(telegram_id=telegram_id)
+        user_points = self.get_user_points(user_id=user.get("id"))
         milestones = self.get_milestones()
 
         current_milestone = ""
-        current_milestone_id = result.get("current_milestone_id")
 
-        current_score = result.get("current_score")
         for milestone in milestones:
-            if current_milestone_id == milestone.get("id"):
-                current_milestone = milestone
-                break
+            if (user_points or 0) >= milestone.get("required_score"):
+                current_milestone = milestone.get("name")
 
-        return current_score, current_milestone
+        return user_points, current_milestone

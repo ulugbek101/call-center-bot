@@ -16,7 +16,7 @@ async def my_progress(message: types.Message):
 
     current_score, current_milestone = db.get_user_progress(telegram_id=message.from_user.id)
 
-    text = "--- Sizning progressingiz ---\n\n"
+    text = "🏳️ <b>Sizning progressingiz</b> 🏳️\n\n"
     text += f"Yig'ilgan ball: <b>{current_score} ball</b>\n"
     text += f"Oxrigi yutuq: <b>{current_milestone if current_milestone else 'Mavjud emas'}</b>"
 

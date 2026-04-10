@@ -9,11 +9,18 @@ from router import router
 async def send_milestones(message: types.Message):
     # Return available achiements list
     milestones = db.get_milestones()
+    user_score, user_milestone = db.get_user_progress(telegram_id=message.from_user.id)
 
-    text = "--- Yutuqlar ro'yxati ---\n\n" if len(milestones) > 0 else "Ro'yxat hozircha bo'sh"
+    text = "🏁 <b>Yutuqlar ro'yxati</b> 🏁\n\n" if len(milestones) > 0 else "Ro'yxat hozircha bo'sh"
+
+    text += f"<i>Sizda mavjud ball: {user_score or 0}</i>\n\n\n"
 
     for index, milestone in enumerate(milestones, start=1):
-        text += f"Kerakli ball: <b>{milestone.get('required_score')} ball</b>\n"
-        text += f"Yutuq:          <b>{milestone.get('name')}</b>\n\n"
+        row_text = f"<b>{milestone.get('required_score')} ball</b> - <b>{milestone.get('name')}</b>"
+
+        if (user_score or 0) >= milestone.get("required_score"):
+            text += f"<s>{row_text}</s> ✅" + "\n\n"
+        else:
+            text += row_text + "\n\n"
 
     await message.answer(text=text, parse_mode="HTML")
