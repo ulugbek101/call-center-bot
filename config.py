@@ -3,6 +3,7 @@ from environs import Env
 env = Env()
 env.read_env()
 
+ADMINS = env.list("ADMINS")
 TOKEN = env.str("TOKEN")
 DB_NAME = env.str("DB_NAME")
 DB_USER = env.str("DB_USER")

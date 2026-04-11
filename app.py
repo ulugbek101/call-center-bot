@@ -4,11 +4,13 @@ import logging
 from loader import dp, bot
 from handlers.start import router
 from commands import set_bot_commands
+from scheduler import start_scheduler
 
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
     await set_bot_commands(bot=bot)
+    start_scheduler()
     await dp.start_polling(bot)
 
 
