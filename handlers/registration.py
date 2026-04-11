@@ -14,18 +14,18 @@ async def save_activation_code(message: types.Message, state: FSMContext):
     # Save activation code and request first_name
     activation_code = message.text
 
+    await state.update_data(activation_code=activation_code)
+
     # Get the user from database
     user = db.get_user(activation_code=activation_code)
 
     # Proceed registration
     if user:
-        db.activate_user(activation_code=activation_code, telegram_id=message.from_user.id)
         await message.answer(text="Aktivatsiya kodi qabul qilindi ✅")
         await message.answer(text="Ismingizni kiriting 👇")
         await state.set_state(UserRegistration.first_name)
     else:
         await message.answer(text="Aktivatsiya kodi noto'g'ri, iltimos, qayta tering yoki mas'ul insonga aloqaga chiqing")
-
 
 
 @router.message(UserRegistration.first_name)
@@ -107,6 +107,11 @@ async def save_phone_number(message: types.Message, state: FSMContext):
         )
         await message.answer(text="Siz muvaffaqiyatli ro'yxatga olindingiz, raxmat!")
         await state.clear()
+
+        state_data = await state.get_data()
+        activation_code = state_data.get("activation_code")
+
+        db.activate_user(activation_code=activation_code, telegram_id=message.from_user.id)
     else:
         await message.answer(
             text="Telefon raqam noto'g'ri formatda kiritildi, tekshirib qaytadan kiriting.\n"

@@ -54,7 +54,7 @@ def start_scheduler():
         send_random_motivational_phrase,
         trigger="cron",
         hour=10,
-        minute=0,
+        minute=00,
         id="send_random_motivational_phrase",
         replace_existing=True,
     )
