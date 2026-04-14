@@ -18,7 +18,7 @@ async def send_milestones(message: types.Message):
         user_object.update({"points": user_points})
         users_with_points.append(user_object)
 
-    leaders_rating = sorted(users_with_points, key=lambda x: x.get("points"))
+    leaders_rating = sorted(users_with_points, key=lambda x: x.get("points"), reverse=True)
 
     text = "📈 <b>Liderlar ro'yxati</b> 📈\n\n\n"
 
