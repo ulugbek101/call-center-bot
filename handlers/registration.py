@@ -19,6 +19,9 @@ async def save_activation_code(message: types.Message, state: FSMContext):
     # Get the user from database
     user = db.get_user(activation_code=activation_code)
 
+    # User activation
+    db.activate_user(activation_code=activation_code, telegram_id=message.from_user.id)
+
     # Proceed registration
     if user:
         await message.answer(text="Aktivatsiya kodi qabul qilindi ✅")
@@ -107,11 +110,6 @@ async def save_phone_number(message: types.Message, state: FSMContext):
         )
         await message.answer(text="Siz muvaffaqiyatli ro'yxatga olindingiz, raxmat!")
         await state.clear()
-
-        state_data = await state.get_data()
-        activation_code = state_data.get("activation_code")
-
-        db.activate_user(activation_code=activation_code, telegram_id=message.from_user.id)
     else:
         await message.answer(
             text="Telefon raqam noto'g'ri formatda kiritildi, tekshirib qaytadan kiriting.\n"

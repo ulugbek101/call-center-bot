@@ -174,9 +174,9 @@ class Database:
         Returns staffs list from database
         """
         sql = """
-            SELECT * FROM users 
-            WHERE telegram_id IS NOT NULL AND 
-                  is_activation_code_used = TRUE AND 
+            SELECT * FROM users
+            WHERE telegram_id IS NOT NULL AND
+                  is_activation_code_used = TRUE AND
                   is_superuser = FALSE
         """
         return self.execute(sql, fetchall=True)
@@ -186,6 +186,6 @@ class Database:
         Returns motivational phrases list from database
         """
         sql = """
-            SELECT * FROM motivational_phrases 
+            SELECT * FROM motivational_phrases
         """
         return self.execute(sql, fetchall=True)
