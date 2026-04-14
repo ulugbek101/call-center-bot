@@ -11,7 +11,7 @@ async def set_bot_commands(bot: Bot):
             BotCommand(command='/start', description='Botni ishga tushirish'),
             BotCommand(command='/help', description='Yordam olish'),
             BotCommand(command='/milestones', description='Yutuqlar ro\'yxatini ko\'rish'),
-            # BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
+            BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
         ],
         language_code="ru",
     )
@@ -21,7 +21,7 @@ async def set_bot_commands(bot: Bot):
             BotCommand(command='/start', description='Botni ishga tushirish'),
             BotCommand(command='/help', description='Yordam olish'),
             BotCommand(command='/milestones', description='Yutuqlar ro\'yxatini ko\'rish'),
-            # BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
+            BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
         ],
         language_code="uz",
     )
@@ -31,7 +31,7 @@ async def set_bot_commands(bot: Bot):
             BotCommand(command='/start', description='Botni ishga tushirish'),
             BotCommand(command='/help', description='Yordam olish'),
             BotCommand(command='/milestones', description='Yutuqlar ro\'yxatini ko\'rish'),
-            # BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
+            BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
         ],
         language_code="en",
     )

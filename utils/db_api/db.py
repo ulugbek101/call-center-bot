@@ -66,6 +66,17 @@ class Database:
         """
         return self.execute(sql, (telegram_id,), fetchone=True)
 
+    def get_users(self) -> list[dict]:
+        """Returns users list from database
+
+        Returns:
+            list[dict]: users list
+        """
+        sql = """
+            SELECT * FROM users
+        """
+        return self.execute(sql, fetchall=True)
+
     def get_user(self, activation_code: str) -> dict | None:
         """Return user from database if exists
 
@@ -93,7 +104,7 @@ class Database:
         sql = """
             SELECT SUM(amount) AS total_points FROM points WHERE user_id = %s
         """
-        return self.execute(sql, (user_id,), fetchone=True).get("total_points")
+        return self.execute(sql, (user_id,), fetchone=True).get("total_points") or 0
 
     def save_attribute(self, attribute_name: str, value: str, telegram_id: str) -> None:
         """Saves user's attribute
