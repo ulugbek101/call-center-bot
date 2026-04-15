@@ -73,7 +73,7 @@ class Database:
             list[dict]: users list
         """
         sql = """
-            SELECT * FROM users
+            SELECT * FROM users WHERE is_superuser = FALSE AND is_activation_code_used = TRUE AND is_active = TRUE
         """
         return self.execute(sql, fetchall=True)
 
