@@ -1,8 +1,9 @@
 COMMANDS = [
     ("/start", "Botni ishga tushirish"),
     ("/help", "Yordam olish"),
-    ("/milestones", "Yutuqlar ro'yxati"),    # TODO: Not implemented
-    ("/leaderboard", "Liderlar doskasi"),           # TODO: Not implemented
+    ("/milestones", "Yutuqlar ro'yxati"),
+    ("/milestones", "Ball to'plash bo'yicha yo'riqnoma"),
+    ("/leaderboard", "Liderlar doskasi"),
 ]
 
 
