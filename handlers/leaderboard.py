@@ -9,6 +9,12 @@ from router import router
 async def send_milestones(message: types.Message):
     # Returns the leaderboard
 
+    user_is_active = db.check_user_activation(telegram_id=message.from_user.id)
+
+    if not user_is_active:
+        await message.answer(text="Siz hali ro'yxatdan o'tishni yakunlamagansiz, avval ro'yxatdan o'tishni yakunlang")
+        return
+
     users = db.get_users()
 
     users_with_points = []

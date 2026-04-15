@@ -12,6 +12,7 @@ async def set_bot_commands(bot: Bot):
             BotCommand(command='/help', description='Yordam olish'),
             BotCommand(command='/milestones', description='Yutuqlar ro\'yxatini ko\'rish'),
             BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
+            BotCommand(command='/docs', description='Ball to\'plash bo\'yicha yo\'riqnoma'),
         ],
         language_code="ru",
     )
@@ -22,6 +23,7 @@ async def set_bot_commands(bot: Bot):
             BotCommand(command='/help', description='Yordam olish'),
             BotCommand(command='/milestones', description='Yutuqlar ro\'yxatini ko\'rish'),
             BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
+            BotCommand(command='/docs', description='Ball to\'plash bo\'yicha yo\'riqnoma'),
         ],
         language_code="uz",
     )
@@ -32,6 +34,7 @@ async def set_bot_commands(bot: Bot):
             BotCommand(command='/help', description='Yordam olish'),
             BotCommand(command='/milestones', description='Yutuqlar ro\'yxatini ko\'rish'),
             BotCommand(command='/leaderboard', description='Yutuqlar ro\'yxatini ko\'rish'),
+            BotCommand(command='/docs', description='Ball to\'plash bo\'yicha yo\'riqnoma'),
         ],
         language_code="en",
     )
