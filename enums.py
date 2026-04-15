@@ -2,8 +2,8 @@ COMMANDS = [
     ("/start", "Botni ishga tushirish"),
     ("/help", "Yordam olish"),
     ("/milestones", "Yutuqlar ro'yxati"),
-    ("/milestones", "Ball to'plash bo'yicha yo'riqnoma"),
     ("/leaderboard", "Liderlar doskasi"),
+    ("/docs", "Ball to'plash bo'yicha yo'riqnoma"),
 ]
 
 
