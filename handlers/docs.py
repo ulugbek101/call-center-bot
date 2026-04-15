@@ -13,7 +13,7 @@ async def docs(message: types.Message):
     user_is_active = db.check_user_activation(telegram_id=message.from_user.id)
 
     if not user_is_active:
-        await message.answer(text="Siz hali ro'yxatdan o'tishni yakunlamagansiz, avval ro'yxatdan o'tishni yakunlang")
+        await message.answer(text="Siz hali ro'yxatdan o'tishni yakunlamagansiz, avval ro'yxatdan o'tishni yakunlang", protect_content=True)
         return
 
     text = "📈 Qanday qilib ball yig'ish mumkin ?\n\n"
@@ -27,4 +27,4 @@ async def docs(message: types.Message):
     for value in how_to_lose_scores:
         text += f"    ּ{value}.\n"
 
-    await message.answer(text=text, parse_mode="HTML")
+    await message.answer(text=text, parse_mode="HTML", protect_content=True)

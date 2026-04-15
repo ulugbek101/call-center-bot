@@ -12,7 +12,7 @@ async def docs(message: types.Message):
     user_is_active = db.check_user_activation(telegram_id=message.from_user.id)
 
     if not user_is_active:
-        await message.answer(text="Siz hali ro'yxatdan o'tishni yakunlamagansiz, avval ro'yxatdan o'tishni yakunlang")
+        await message.answer(text="Siz hali ro'yxatdan o'tishni yakunlamagansiz, avval ro'yxatdan o'tishni yakunlang", protect_content=True)
         return
 
     text = "📖 Mavjud buyruqlar:\n\n"
@@ -20,4 +20,4 @@ async def docs(message: types.Message):
     for command in COMMANDS:
         text += f"{command[0]} - {command[-1]}\n"
 
-    await message.answer(text)
+    await message.answer(text, protect_content=True)

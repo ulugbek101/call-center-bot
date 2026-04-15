@@ -20,4 +20,4 @@ async def my_progress(message: types.Message):
     text += f"Yig'ilgan ball: <b>{current_score} ball</b>\n"
     text += f"Oxrigi yutuq: <b>{current_milestone if current_milestone else 'Mavjud emas'}</b>"
 
-    await message.answer(text=text, parse_mode="HTML")
+    await message.answer(text=text, parse_mode="HTML", protect_content=True)

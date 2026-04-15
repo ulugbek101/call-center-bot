@@ -15,7 +15,7 @@ async def send_milestones(message: types.Message):
     try:
         user_score, user_milestone = db.get_user_progress(telegram_id=message.from_user.id)
     except AttributeError:
-        await message.answer(text="Siz hali ro'yxatdan o'tishni yakunlamagansiz, avval ro'yxatdan o'tishni yakunlang")
+        await message.answer(text="Siz hali ro'yxatdan o'tishni yakunlamagansiz, avval ro'yxatdan o'tishni yakunlang", protect_content=True)
         return
 
     text = "🏁 <b>Yutuqlar ro'yxati</b> 🏁\n\n" if len(milestones) > 0 else "Ro'yxat hozircha bo'sh"
@@ -30,4 +30,4 @@ async def send_milestones(message: types.Message):
         else:
             text += row_text + "\n\n\n"
 
-    await message.answer(text=text, parse_mode="HTML")
+    await message.answer(text=text, parse_mode="HTML", protect_content=True)

@@ -21,14 +21,14 @@ async def send_notification(message: types.Message, state: FSMContext):
     markup = ReplyKeyboardBuilder()
     markup.button(text="Bekor qilish")
 
-    await message.answer("E'lon matnini yozing 👇", reply_markup=markup.as_markup(resize_keyboard=True))
+    await message.answer("E'lon matnini yozing 👇", reply_markup=markup.as_markup(resize_keyboard=True), protect_content=True)
     await state.set_state(AdminNotification.content)
 
 
 @router.message(AdminNotification.content, F.text == "Bekor qilish")
 async def cancel_notification(message: types.Message, state: FSMContext):
     await state.clear()
-    await message.answer("E'lon yuborish bekor qilindi ✅", reply_markup=types.ReplyKeyboardRemove())
+    await message.answer("E'lon yuborish bekor qilindi ✅", reply_markup=types.ReplyKeyboardRemove(), protect_content=True)
 
 
 @router.message(AdminNotification.content)
@@ -61,5 +61,6 @@ async def forward_notification_to_all_users(message: types.Message, state: FSMCo
 
     await message.answer(
         text=text,
-        reply_markup=types.ReplyKeyboardRemove()
+        reply_markup=types.ReplyKeyboardRemove(),
+        protect_content=True
     )

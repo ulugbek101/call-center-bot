@@ -24,11 +24,11 @@ async def save_activation_code(message: types.Message, state: FSMContext):
 
     # Proceed registration
     if user:
-        await message.answer(text="Aktivatsiya kodi qabul qilindi ✅")
-        await message.answer(text="Ismingizni kiriting 👇")
+        await message.answer(text="Aktivatsiya kodi qabul qilindi ✅", protect_content=True)
+        await message.answer(text="Ismingizni kiriting 👇", protect_content=True)
         await state.set_state(UserRegistration.first_name)
     else:
-        await message.answer(text="Aktivatsiya kodi noto'g'ri, iltimos, qayta tering yoki mas'ul insonga aloqaga chiqing")
+        await message.answer(text="Aktivatsiya kodi noto'g'ri, iltimos, qayta tering yoki mas'ul insonga aloqaga chiqing", protect_content=True)
 
 
 @router.message(UserRegistration.first_name)
@@ -38,10 +38,10 @@ async def save_first_name(message: types.Message, state: FSMContext):
 
     # Save user's first_name to database
     db.save_attribute(attribute_name="first_name", value=first_name, telegram_id=message.from_user.id)
-    await message.answer(text="Ismingiz muvaffaqiyatli saqlandi ✅")
+    await message.answer(text="Ismingiz muvaffaqiyatli saqlandi ✅", protect_content=True)
 
     # Request last_name
-    await message.answer(text="Familiyangizni kiriting 👇")
+    await message.answer(text="Familiyangizni kiriting 👇", protect_content=True)
     await state.set_state(UserRegistration.last_name)
 
 
@@ -52,10 +52,10 @@ async def save_last_name(message: types.Message, state: FSMContext):
 
     # Save user's last_name to database
     db.save_attribute(attribute_name="last_name", value=last_name, telegram_id=message.from_user.id)
-    await message.answer(text="Familiyangiz muvaffaqiyatli saqlandi ✅")
+    await message.answer(text="Familiyangiz muvaffaqiyatli saqlandi ✅", protect_content=True)
 
     # Request last_name
-    await message.answer(text="Sharifingizni kiriting 👇")
+    await message.answer(text="Sharifingizni kiriting 👇", protect_content=True)
     await state.set_state(UserRegistration.middle_name)
 
 
@@ -66,14 +66,14 @@ async def save_middle_name(message: types.Message, state: FSMContext):
 
     # Save user's middle_name to database
     db.save_attribute(attribute_name="middle_name", value=middle_name, telegram_id=message.from_user.id)
-    await message.answer(text="Sharifingiz muvaffaqiyatli saqlandi ✅")
+    await message.answer(text="Sharifingiz muvaffaqiyatli saqlandi ✅", protect_content=True)
 
     # Request phone_number
-    await message.answer(text="Telefon raqamingizni kiriting 👇 yoki tugmani bosish orqali yuboring")
+    await message.answer(text="Telefon raqamingizni kiriting 👇 yoki tugmani bosish orqali yuboring", protect_content=True)
     await message.answer(
         text="Telefon raqamni tugma orqali yuboring yoki quyidagicha formatda kiriting:\n1. +998996937308\n2. +998 99 693 73 08",
         reply_markup=ReplyKeyboardBuilder().button(text="📞 Telefon raqamimni ulashish", request_contact=True).as_markup(resize_keyboard=True)
-    )
+    , protect_content=True)
     await state.set_state(UserRegistration.phone_number)
 
 
@@ -86,7 +86,7 @@ async def save_phone_number(message: types.Message, state: FSMContext):
         phone_number = message.text.replace(' ', '').strip()
     else:
         await message.answer(
-            text="Telefon raqamni matn ko'rinishida yoki tugma orqali yuboring"
+            text="Telefon raqamni matn ko'rinishida yoki tugma orqali yuboring", protect_content=True
         )
         return
 
@@ -101,19 +101,19 @@ async def save_phone_number(message: types.Message, state: FSMContext):
         try:
             db.save_attribute(attribute_name="phone_number", value=phone_number, telegram_id=message.from_user.id)
         except Exception as exp:
-            # await message.answer(text="Telefon raqamni saqlashda xatolik yuz berdi.\n{exp.__class__.__name__}: {exp}")
-            await message.answer(text="Telefon raqam avval ro'yatga olingan")
+            await message.answer(text="Telefon raqam avval ro'yatga olingan", protect_content=True)
             return
         await message.answer(
             text="Telefon raqamingiz muvaffaqiyatli saqlandi ✅",
-            reply_markup=types.ReplyKeyboardRemove()
+            reply_markup=types.ReplyKeyboardRemove(), protect_content=True
         )
-        await message.answer(text="Siz muvaffaqiyatli ro'yxatga olindingiz, raxmat!")
+        await message.answer(text="Siz muvaffaqiyatli ro'yxatga olindingiz, raxmat!", protect_content=True)
         await state.clear()
     else:
         await message.answer(
             text="Telefon raqam noto'g'ri formatda kiritildi, tekshirib qaytadan kiriting.\n"
                  "Masalan:\n"
                  "1. +998996937308\n"
-                 "2. +998 99 693 73 08"
+                 "2. +998 99 693 73 08",
+            protect_content=True
         )
